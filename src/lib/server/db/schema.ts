@@ -1,6 +1,6 @@
 import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-export const authProviderEnum = pgEnum('auth_provider', ["clerk"]);
+export const authProviderEnum = pgEnum('auth_provider', ['clerk']);
 
 export const usersTable = pgTable('users', {
 	id: uuid('id').primaryKey().defaultRandom(),

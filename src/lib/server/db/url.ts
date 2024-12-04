@@ -35,7 +35,5 @@ export const getAllURLs = async () => {
 };
 
 export const insertURL = async (url: string, shortPath: string) => {
-	return (
-		await db.insert(urlMappings).values({ redirectUrl: url, id: shortPath }).returning()
-	)[0];
+	return (await db.insert(urlMappings).values({ redirectUrl: url, id: shortPath }).returning())[0];
 };
