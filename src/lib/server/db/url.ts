@@ -4,7 +4,10 @@ import { eq } from 'drizzle-orm';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-export const selectUrlSchema = createSelectSchema(urlMappings);
+export const selectUrlSchema = createSelectSchema(urlMappings, {
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date(),
+});
 export type SelectUrlSchema = z.infer<typeof selectUrlSchema>;
 
 export const insertUrlSchema = createInsertSchema(urlMappings);
@@ -22,4 +25,8 @@ export const getURLFromShortPath = async (shortPath: string) => {
 	}
 
 	return results[0].redirect;
+}
+
+export const getAllURLs = async () => {
+	return db.select().from(urlMappings);
 }

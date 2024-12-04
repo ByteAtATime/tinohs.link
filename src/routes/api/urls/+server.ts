@@ -1,10 +1,15 @@
 import type { RequestHandler } from './$types';
-import { db } from '$lib/server/db';
-import { urlMappings } from '$lib/server/db/schema';
 import { json } from '@sveltejs/kit';
+import { getAllURLs, selectUrlSchema } from '$lib/server/db/url';
 
 export const GET: RequestHandler = async () => {
-	const urls = await db.select().from(urlMappings);
+	try {
+		const urls = await getAllURLs();
+		const validatedUrls = selectUrlSchema.array().parse(urls);
 
-	return json(urls);
+		return json(validatedUrls);
+	} catch (e) {
+		console.error(e);
+		return json({ error: 'An error occurred' }, { status: 500 });
+	}
 }
