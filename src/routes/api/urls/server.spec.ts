@@ -75,10 +75,10 @@ describe('/api/urls', () => {
 				method: 'POST',
 				body: JSON.stringify({ shortUrl: 'short' })
 			});
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const response = await POST({
 				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
 				request
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
 			expect(response.status).toBe(400);
 
@@ -94,10 +94,10 @@ describe('/api/urls', () => {
 				method: 'POST',
 				body: JSON.stringify({ redirectUrl: 'redirect' })
 			});
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const response = await POST({
 				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
 				request
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
 			expect(response.status).toBe(400);
 
@@ -114,10 +114,10 @@ describe('/api/urls', () => {
 				method: 'POST',
 				body: JSON.stringify({ redirectUrl: 'redirect', shortUrl: 'short' })
 			});
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const response = await POST({
 				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
 				request
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
 			expect(response.status).toBe(500);
 
@@ -131,10 +131,10 @@ describe('/api/urls', () => {
 				method: 'POST',
 				body: JSON.stringify({ redirectUrl: 'redirect', shortUrl: 'short' })
 			});
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const response = await POST({
 				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
 				request
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
 			expect(response.status).toBe(201);
 
