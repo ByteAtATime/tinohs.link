@@ -5,5 +5,5 @@ export const urlMappings = pgTable('url_mappings', {
 	redirectUrl: text('redirect_url').notNull(),
 	shortUrl: text('short_url').notNull().unique(),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
-	updatedAt: timestamp('updated_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });

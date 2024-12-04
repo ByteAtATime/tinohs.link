@@ -15,18 +15,21 @@ export const GET: RequestHandler = async () => {
 	}
 };
 
-export const POST: RequestHandler = validateSchema(insertUrlSchema, async (data, { locals: { auth } }) => {
-	if (!auth.userId) {
-		return json({ error: 'Unauthorized' }, { status: 401 });
-	}
+export const POST: RequestHandler = validateSchema(
+	insertUrlSchema,
+	async (data, { locals: { auth } }) => {
+		if (!auth.userId) {
+			return json({ error: 'Unauthorized' }, { status: 401 });
+		}
 
-	try {
-		const { redirectUrl, shortUrl } = data;
-		const id = await insertURL(redirectUrl, shortUrl);
+		try {
+			const { redirectUrl, shortUrl } = data;
+			const id = await insertURL(redirectUrl, shortUrl);
 
-		return json({ id }, { status: 201 });
-	} catch (e) {
-		console.error(e);
-		return json({ error: 'An error occurred' }, { status: 500 });
+			return json({ id }, { status: 201 });
+		} catch (e) {
+			console.error(e);
+			return json({ error: 'An error occurred' }, { status: 500 });
+		}
 	}
-});
+);
