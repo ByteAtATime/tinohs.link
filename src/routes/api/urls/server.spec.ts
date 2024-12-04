@@ -22,8 +22,7 @@ describe('/api/urls', () => {
 		it('should return all URLs', async () => {
 			const mockURLs = [
 				{
-					id: '00000000-0000-0000-0000-000000000000',
-					shortUrl: 'short',
+					id: 'shortUrl',
 					redirectUrl: 'redirect',
 					createdAt: new Date(),
 					updatedAt: new Date()
@@ -60,7 +59,7 @@ describe('/api/urls', () => {
 		it('should return 401 if not authenticated', async () => {
 			const request = new Request('http://localhost:5173/api/urls', {
 				method: 'POST',
-				body: JSON.stringify({ redirectUrl: 'redirect', shortUrl: 'short' })
+				body: JSON.stringify({ redirectUrl: 'redirect', id: 'short' })
 			});
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const response = await POST({ locals: { auth: {} }, request } as any);
@@ -73,10 +72,10 @@ describe('/api/urls', () => {
 		it('should return 400 if missing redirectUrl', async () => {
 			const request = new Request('http://localhost:5173/api/urls', {
 				method: 'POST',
-				body: JSON.stringify({ shortUrl: 'short' })
+				body: JSON.stringify({ id: 'short' })
 			});
 			const response = await POST({
-				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
+				locals: { auth: { userId: 'userId' } },
 				request
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
@@ -89,13 +88,13 @@ describe('/api/urls', () => {
 			});
 		});
 
-		it('should return 400 if missing shortUrl', async () => {
+		it('should return 400 if missing id', async () => {
 			const request = new Request('http://localhost:5173/api/urls', {
 				method: 'POST',
 				body: JSON.stringify({ redirectUrl: 'redirect' })
 			});
 			const response = await POST({
-				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
+				locals: { auth: { userId: 'userId' } },
 				request
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
@@ -104,7 +103,7 @@ describe('/api/urls', () => {
 			const body = await response.json();
 			expect(body).toEqual({
 				error: 'Validation failed',
-				errors: [{ message: 'Required', path: 'shortUrl' }]
+				errors: [{ message: 'Required', path: 'id' }]
 			});
 		});
 
@@ -112,10 +111,10 @@ describe('/api/urls', () => {
 			mocks.insertURL.mockRejectedValue(new Error('Fake error in insertURL()'));
 			const request = new Request('http://localhost:5173/api/urls', {
 				method: 'POST',
-				body: JSON.stringify({ redirectUrl: 'redirect', shortUrl: 'short' })
+				body: JSON.stringify({ redirectUrl: 'redirect', id: 'short' })
 			});
 			const response = await POST({
-				locals: { auth: { userId: 'some-user-id' } },
+				locals: { auth: { userId: 'userId' } },
 				request
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
@@ -126,20 +125,20 @@ describe('/api/urls', () => {
 		});
 
 		it('should return 201 if successful', async () => {
-			mocks.insertURL.mockResolvedValue({ id: '00000000-0000-0000-0000-000000000000' });
+			mocks.insertURL.mockImplementation((_, id) => ({ id }));
 			const request = new Request('http://localhost:5173/api/urls', {
 				method: 'POST',
-				body: JSON.stringify({ redirectUrl: 'redirect', shortUrl: 'short' })
+				body: JSON.stringify({ redirectUrl: 'redirect', id: 'short' })
 			});
 			const response = await POST({
-				locals: { auth: { userId: '00000000-0000-0000-0000-000000000000' } },
+				locals: { auth: { userId: 'userId' } },
 				request
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} as any);
 			expect(response.status).toBe(201);
 
 			const body = await response.json();
-			expect(body).toEqual({ id: '00000000-0000-0000-0000-000000000000' });
+			expect(body).toEqual({ id: 'short' });
 		});
 	});
 });

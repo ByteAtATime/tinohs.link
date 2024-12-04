@@ -17,7 +17,7 @@ export const getURLFromShortPath = async (shortPath: string) => {
 	const results = await db
 		.select({ redirect: urlMappings.redirectUrl })
 		.from(urlMappings)
-		.where(eq(urlMappings.shortUrl, shortPath));
+		.where(eq(urlMappings.id, shortPath));
 
 	if (results.length === 0) {
 		return null;
@@ -36,6 +36,6 @@ export const getAllURLs = async () => {
 
 export const insertURL = async (url: string, shortPath: string) => {
 	return (
-		await db.insert(urlMappings).values({ redirectUrl: url, shortUrl: shortPath }).returning()
+		await db.insert(urlMappings).values({ redirectUrl: url, id: shortPath }).returning()
 	)[0];
 };

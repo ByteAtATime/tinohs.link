@@ -23,10 +23,10 @@ export const POST: RequestHandler = validateSchema(
 		}
 
 		try {
-			const { redirectUrl, shortUrl } = data;
-			const { id } = await insertURL(redirectUrl, shortUrl);
+			const { redirectUrl, id } = data;
+			const { id: createdId } = await insertURL(redirectUrl, id);
 
-			return json({ id }, { status: 201 });
+			return json({ id: createdId }, { status: 201 });
 		} catch (e) {
 			console.error(e);
 			return json({ error: 'An error occurred' }, { status: 500 });
