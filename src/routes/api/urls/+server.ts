@@ -24,7 +24,7 @@ export const POST: RequestHandler = validateSchema(
 
 		try {
 			const { redirectUrl, shortUrl } = data;
-			const id = await insertURL(redirectUrl, shortUrl);
+			const { id } = await insertURL(redirectUrl, shortUrl);
 
 			return json({ id }, { status: 201 });
 		} catch (e) {
