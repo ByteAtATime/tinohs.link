@@ -46,6 +46,8 @@
 	"dependencies": {
 		"clerk-sveltekit": "https://pkg.pr.new/wobsoriano/clerk-sveltekit@ca15d4e",
 		"drizzle-orm": "^0.33.0",
-		"postgres": "^3.4.4"
+		"drizzle-zod": "^0.5.1",
+		"postgres": "^3.4.4",
+		"zod": "^3.23.8"
 	}
 }
