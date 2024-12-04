@@ -30,3 +30,7 @@ export const getURLFromShortPath = async (shortPath: string) => {
 export const getAllURLs = async () => {
 	return db.select().from(urlMappings);
 }
+
+export const insertURL = async (url: string, shortPath: string) => {
+	return (await db.insert(urlMappings).values({ redirectUrl: url, shortUrl: shortPath }).returning())[0];
+}

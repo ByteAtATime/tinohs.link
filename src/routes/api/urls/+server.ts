@@ -1,6 +1,7 @@
 import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
-import { getAllURLs, selectUrlSchema } from '$lib/server/db/url';
+import { getAllURLs, insertURL, insertUrlSchema, selectUrlSchema } from '$lib/server/db/url';
+import { validateSchema } from '$lib/validation';
 
 export const GET: RequestHandler = async () => {
 	try {
@@ -12,4 +13,20 @@ export const GET: RequestHandler = async () => {
 		console.error(e);
 		return json({ error: 'An error occurred' }, { status: 500 });
 	}
-}
+};
+
+export const POST: RequestHandler = validateSchema(insertUrlSchema, async (data, { locals: { auth } }) => {
+	if (!auth.userId) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
+	try {
+		const { redirectUrl, shortUrl } = data;
+		const id = await insertURL(redirectUrl, shortUrl);
+
+		return json({ id }, { status: 201 });
+	} catch (e) {
+		console.error(e);
+		return json({ error: 'An error occurred' }, { status: 500 });
+	}
+});
