@@ -11,7 +11,14 @@ export type EndpointHandler<TDeps> = (
 ) => Promise<Response> | Response;
 
 export const endpoint = (handler: EndpointHandler<Record<string, never>>): RequestHandler => {
-	return (event) => handler({}, event);
+	return (event) => {
+		try {
+			return handler({}, event);
+		} catch (e) {
+			console.error(e);
+			throw e;
+		}
+	}
 };
 
 export const withBodySchema = <TDeps extends { body: z.infer<TSchema> }, TSchema extends z.ZodType>(

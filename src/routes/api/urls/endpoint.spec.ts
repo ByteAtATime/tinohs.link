@@ -1,9 +1,8 @@
-import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { selectUrlSchema, type InsertUrlSchema, type SelectUrlSchema } from '$lib/server/url';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { selectUrlSchema, type InsertUrlSchema } from '$lib/server/url';
 import { endpoint_GET, endpoint_POST } from './endpoint';
 import { MockURLRepository } from '$lib/server/mocks/url';
 import { MockAuthProvider } from '$lib/server/mocks/auth';
-import { withBodySchema } from '$lib/server/endpoints';
 
 describe('/api/urls', () => {
 	describe('GET', () => {
@@ -50,12 +49,13 @@ describe('/api/urls', () => {
 		beforeEach(() => {
 			mockURLRepository = new MockURLRepository();
 			mockAuthProvider = new MockAuthProvider();
-			mockBody = { id: 'short', redirectUrl: 'redirect' };
+			mockBody = { id: 'short', redirectUrl: 'redirect', owner: "00000000-0000-0000-0000-000000000000" };
 
 			mockDeps = { urlRepository: mockURLRepository, auth: mockAuthProvider, body: mockBody };
 		});
 
 		it('should return 401 if not authenticated', async () => {
+			mockURLRepository.getURLFromShortPath.mockResolvedValue(null);
 			mockAuthProvider.isAuthenticated.mockReturnValue(false);
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,6 +67,7 @@ describe('/api/urls', () => {
 		});
 
 		it('should return 500 if insertURL throws', async () => {
+			mockURLRepository.getURLFromShortPath.mockResolvedValue(null);
 			mockURLRepository.insertURL.mockRejectedValue(new Error('Fake error in insertURL()'));
 			mockAuthProvider.isAuthenticated.mockReturnValue(true);
 
@@ -80,6 +81,7 @@ describe('/api/urls', () => {
 		});
 
 		it('should return 201 if successful', async () => {
+			mockURLRepository.getURLFromShortPath.mockResolvedValue(null);
 			mockAuthProvider.isAuthenticated.mockReturnValue(true);
 
 			const response = await endpoint_POST(

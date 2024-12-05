@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 export class MockURLRepository implements IURLRepository {
 	public static MOCK_URL = {
 		id: 'short',
+		owner: '00000000-0000-0000-0000-000000000000',
 		redirectUrl: 'redirect',
 		createdAt: new Date(),
 		updatedAt: new Date()

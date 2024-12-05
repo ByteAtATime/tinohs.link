@@ -5,5 +5,5 @@ export interface IURLRepository {
 	getAllURLs: () => Promise<SelectUrlSchema[]>;
 
 	/** @returns The ID of the inserted URL */
-	insertURL: (redirectUrl: string, shortPath: string) => Promise<string>;
+	insertURL: (redirectUrl: string, shortPath: string, creator: string) => Promise<string>;
 }

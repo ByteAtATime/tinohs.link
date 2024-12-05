@@ -23,7 +23,9 @@ export const endpoint_POST: EndpointHandler<{
 	body: InsertUrlSchema;
 	auth: IAuthProvider;
 }> = async ({ urlRepository, body, auth }) => {
-	if (!auth.isAuthenticated()) {
+	const creator = await auth.getUserId();
+
+	if (!auth.isAuthenticated() || !creator) {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
@@ -34,7 +36,7 @@ export const endpoint_POST: EndpointHandler<{
 	}
 
 	try {
-		const newUrlId = await urlRepository.insertURL(body.redirectUrl, body.id);
+		const newUrlId = await urlRepository.insertURL(body.redirectUrl, body.id, creator);
 
 		return json(newUrlId, { status: 201 });
 	} catch (e) {
