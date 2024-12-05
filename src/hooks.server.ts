@@ -3,6 +3,8 @@ import { redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { withClerkHandler } from 'clerk-sveltekit/server';
 
+const protectedPaths = ["/"];
+
 export const handle = sequence(
 	withClerkHandler({
 		signInUrl: '/login',
@@ -12,7 +14,7 @@ export const handle = sequence(
 	({ event, resolve }) => {
 		const { userId } = event.locals.auth;
 
-		if (!userId && !event.url.pathname.startsWith('/login')) {
+		if (!userId && protectedPaths.includes(event.url.pathname)) {
 			return redirect(307, '/login');
 		}
 
