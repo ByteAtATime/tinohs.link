@@ -27,6 +27,12 @@ export const endpoint_POST: EndpointHandler<{
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
+	const currentUrl = await urlRepository.getURLFromShortPath(body.id);
+
+	if (currentUrl) {
+		return json({ error: "Short URL already exists" }, { status: 409 })
+	}
+
 	try {
 		const newUrlId = await urlRepository.insertURL(body.redirectUrl, body.id);
 

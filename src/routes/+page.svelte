@@ -13,8 +13,6 @@
 	let isLoading = $state(false);
 </script>
 
-{JSON.stringify(form)}
-
 <Dialog.Root>
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Edit Profile</Dialog.Trigger>
 	<Dialog.Content>
@@ -44,6 +42,7 @@
 				return async ({ update, result }) => {
 					isLoading = false;
 
+					console.log(result);
 					if (result.type === 'success') {
 						resolve(undefined);
 					} else {
@@ -70,6 +69,11 @@
 					/>
 				</div>
 			</div>
+
+			{#if form?.error}
+				<p class="text-red-500 text-right text-sm mb-2">{form.error}</p>
+			{/if}
+
 			<Dialog.Footer>
 				{#if !isLoading}
 					<Button type="submit">Create Shortened Link</Button>

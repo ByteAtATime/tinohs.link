@@ -1,3 +1,4 @@
+import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
@@ -11,6 +12,11 @@ export const actions: Actions = {
 				redirectUrl: data.get('redirect_url')
 			})
 		});
+
+		if (!res.ok) {
+			const data = await res.json();
+			return fail(res.status, { error: data.error })
+		}
 
 		return {
 			status: res.status,
