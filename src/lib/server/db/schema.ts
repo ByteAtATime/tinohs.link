@@ -11,8 +11,9 @@ export const usersTable = pgTable('users', {
 });
 
 export const urlMappings = pgTable('url_mappings', {
-	id: text('id').primaryKey(),
+	id: text('id').primaryKey(),	
 	redirectUrl: text('redirect_url').notNull(),
+	owner: uuid('owner').notNull().references(() => usersTable.id),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });

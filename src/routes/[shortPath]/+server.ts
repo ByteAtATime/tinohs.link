@@ -1,14 +1,5 @@
+import { endpoint, withURLRepository } from '$lib/server/endpoints';
 import type { RequestHandler } from './$types';
-import { getURLFromShortPath } from '$lib/server/url';
-import { error, redirect } from '@sveltejs/kit';
+import { endpoint_GET } from './endpoint';
 
-export const GET: RequestHandler = async ({ params }) => {
-	const shortPath = params.shortPath;
-	const destinationURL = await getURLFromShortPath(shortPath);
-
-	if (!destinationURL) {
-		error(404, 'Not found');
-	}
-
-	redirect(302, destinationURL);
-};
+export const GET: RequestHandler = endpoint(withURLRepository(endpoint_GET))
