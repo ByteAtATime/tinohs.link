@@ -45,7 +45,7 @@ describe('/api/urls', () => {
 			urlRepository: MockURLRepository;
 			auth: MockAuthProvider;
 			body: InsertUrlSchema;
-		}
+		};
 
 		beforeEach(() => {
 			mockURLRepository = new MockURLRepository();
@@ -61,24 +61,24 @@ describe('/api/urls', () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const response = await endpoint_POST(mockDeps, {} as any);
 			expect(response.status).toBe(401);
-		
+
 			const body = await response.json();
 			expect(body).toEqual({ error: 'Unauthorized' });
 		});
 
-			it('should return 500 if insertURL throws', async () => {
-				mockURLRepository.insertURL.mockRejectedValue(new Error("Fake error in insertURL()"));
-				mockAuthProvider.isAuthenticated.mockReturnValue(true);
+		it('should return 500 if insertURL throws', async () => {
+			mockURLRepository.insertURL.mockRejectedValue(new Error('Fake error in insertURL()'));
+			mockAuthProvider.isAuthenticated.mockReturnValue(true);
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const response = await endpoint_POST(mockDeps, {} as any);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const response = await endpoint_POST(mockDeps, {} as any);
 
-				expect(response.status).toBe(500);
-		
-				const body = await response.json();
-				expect(body).toEqual({ error: 'An error occurred' });
-			});
-		
+			expect(response.status).toBe(500);
+
+			const body = await response.json();
+			expect(body).toEqual({ error: 'An error occurred' });
+		});
+
 		it('should return 201 if successful', async () => {
 			mockAuthProvider.isAuthenticated.mockReturnValue(true);
 
