@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { getURLFromShortPath } from '$lib/server/db/url';
+import { getURLFromShortPath } from '$lib/server/url';
 import { error, redirect } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ params }) => {

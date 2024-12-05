@@ -1,10 +1,20 @@
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ fetch, request }) => {
 		const data = await request.formData();
-		console.log(Array.from(data.entries()));
 
-		return { success: true };
+		const res = await fetch('/api/urls', {
+			method: 'POST',
+			body: JSON.stringify({
+				id: data.get('short_url'),
+				redirectUrl: data.get('redirect_url')
+			})
+		});
+
+		return {
+			status: res.status,
+			body: await res.json()
+		};
 	}
 };

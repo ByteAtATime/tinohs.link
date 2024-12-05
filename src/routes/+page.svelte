@@ -6,9 +6,14 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { LoaderIcon } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
+
+	const { form } = $props();
 
 	let isLoading = $state(false);
 </script>
+
+{JSON.stringify(form)}
 
 <Dialog.Root>
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Edit Profile</Dialog.Trigger>
@@ -22,8 +27,29 @@
 			method="POST"
 			use:enhance={() => {
 				isLoading = true;
-				return async ({ update }) => {
+				let resolve: (val: undefined) => void;
+				let reject: () => void;
+
+				const promise = new Promise((res, rej) => {
+					resolve = res;
+					reject = rej;
+				});
+
+				toast.promise(promise, {
+					loading: 'Creating short URL...',
+					success: 'Short URL created successfully!',
+					error: 'Failed to create short URL.'
+				});
+
+				return async ({ update, result }) => {
 					isLoading = false;
+
+					if (result.type === 'success') {
+						resolve(undefined);
+					} else {
+						reject();
+					}
+
 					update();
 				};
 			}}

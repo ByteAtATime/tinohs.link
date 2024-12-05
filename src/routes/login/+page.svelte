@@ -1,7 +1,7 @@
 <script lang="ts">
-	import SignIn from "clerk-sveltekit/client/SignIn.svelte";
+	import SignIn from 'clerk-sveltekit/client/SignIn.svelte';
 </script>
 
-<div class="flex items-center justify-center h-screen">
-    <SignIn />
+<div class="flex h-screen items-center justify-center">
+	<SignIn />
 </div>

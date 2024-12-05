@@ -48,6 +48,7 @@
 		"vitest": "^2.0.4"
 	},
 	"dependencies": {
+		"@clerk/backend": "^1.19.1",
 		"clerk-sveltekit": "https://pkg.pr.new/wobsoriano/clerk-sveltekit@ca15d4e",
 		"drizzle-orm": "^0.33.0",
 		"drizzle-zod": "^0.5.1",
