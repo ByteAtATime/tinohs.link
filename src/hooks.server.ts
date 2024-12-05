@@ -1,3 +1,4 @@
+import { CLERK_SECRET_KEY } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { withClerkHandler } from 'clerk-sveltekit/server';
@@ -5,7 +6,8 @@ import { withClerkHandler } from 'clerk-sveltekit/server';
 export const handle = sequence(
 	withClerkHandler({
 		signInUrl: '/login',
-		afterSignInUrl: '/'
+		afterSignInUrl: '/',
+		secretKey: CLERK_SECRET_KEY
 	}),
 	({ event, resolve }) => {
 		const { userId } = event.locals.auth;
