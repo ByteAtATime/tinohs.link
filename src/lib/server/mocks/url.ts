@@ -7,6 +7,7 @@ export class MockURLRepository implements IURLRepository {
 		id: 'short',
 		owner: '00000000-0000-0000-0000-000000000000',
 		redirectUrl: 'redirect',
+		name: null,
 		createdAt: new Date(),
 		updatedAt: new Date()
 	} satisfies SelectUrlSchema;
@@ -20,5 +21,12 @@ export class MockURLRepository implements IURLRepository {
 			return MockURLRepository.MOCK_URL;
 		}
 		return null;
+	});
+
+	getURLSOwnedBy = vi.fn().mockImplementation((owner: string) => {
+		if (owner === MockURLRepository.MOCK_URL.owner) {
+			return [MockURLRepository.MOCK_URL];
+		}
+		return [];
 	});
 }

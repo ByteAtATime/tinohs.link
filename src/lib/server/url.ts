@@ -36,10 +36,10 @@ export class PostgresURLRepository implements IURLRepository {
 		return db.select().from(urlMappings);
 	}
 
-	async insertURL(url: string, shortPath: string, creator: string) {
+	async insertURL(url: string, shortPath: string, creator: string, name?: string) {
 		const insertedRows = await db
 			.insert(urlMappings)
-			.values({ redirectUrl: url, id: shortPath, owner: creator })
+			.values({ redirectUrl: url, id: shortPath, owner: creator, name })
 			.returning();
 
 		if (insertedRows.length !== 1) {
@@ -47,5 +47,9 @@ export class PostgresURLRepository implements IURLRepository {
 		}
 
 		return insertedRows[0].id;
+	}
+
+	async getURLSOwnedBy(owner: string) {
+		return db.select().from(urlMappings).where(eq(urlMappings.owner, owner));
 	}
 }

@@ -4,11 +4,19 @@ import { json } from '@sveltejs/kit';
 import { type InsertUrlSchema, selectUrlSchema } from '$lib/server/url';
 import type { IAuthProvider } from '$lib/server/types/auth';
 
-export const endpoint_GET: EndpointHandler<{ urlRepository: IURLRepository }> = async ({
-	urlRepository
-}) => {
+export const endpoint_GET: EndpointHandler<{
+	urlRepository: IURLRepository;
+	auth: IAuthProvider;
+}> = async ({ urlRepository, auth }) => {
+	const userId = await auth.getUserId();
+
+	if (!userId) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
 	try {
-		const urls = await urlRepository.getAllURLs();
+		const urls = await urlRepository.getURLSOwnedBy(userId);
+
 		const validatedUrls = selectUrlSchema.array().parse(urls);
 
 		return json(validatedUrls);
@@ -32,11 +40,11 @@ export const endpoint_POST: EndpointHandler<{
 	const currentUrl = await urlRepository.getURLFromShortPath(body.id);
 
 	if (currentUrl) {
-		return json({ error: "Short URL already exists" }, { status: 409 })
+		return json({ error: 'Short URL already exists' }, { status: 409 });
 	}
 
 	try {
-		const newUrlId = await urlRepository.insertURL(body.redirectUrl, body.id, creator);
+		const newUrlId = await urlRepository.insertURL(body.redirectUrl, body.id, creator, body.name ?? undefined);
 
 		return json(newUrlId, { status: 201 });
 	} catch (e) {

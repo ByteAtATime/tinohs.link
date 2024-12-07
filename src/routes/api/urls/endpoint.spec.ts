@@ -6,11 +6,13 @@ import { MockAuthProvider } from '$lib/server/mocks/auth';
 
 describe('/api/urls', () => {
 	describe('GET', () => {
-		it('should return all URLs', async () => {
+		it('should return URLs with the correct owner', async () => {
 			const mockUrlRepository = new MockURLRepository();
+			const mockAuthProvider = new MockAuthProvider();
+			mockAuthProvider.getUserId.mockResolvedValue(MockURLRepository.MOCK_URL.owner);
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const response = await endpoint_GET({ urlRepository: mockUrlRepository }, {} as any);
+			const response = await endpoint_GET({ urlRepository: mockUrlRepository, auth: mockAuthProvider }, {} as any);
 
 			expect(response.status).toBe(200);
 
@@ -21,13 +23,40 @@ describe('/api/urls', () => {
 			expect(parsed.data).toEqual([MockURLRepository.MOCK_URL]);
 		});
 
-		it('should return 500 if getAllURLs throws', async () => {
+		it("should return 401 if not authenticated", async () => {
 			const mockURLRepository = new MockURLRepository();
-
-			mockURLRepository.getAllURLs.mockRejectedValue(new Error('Fake error in getAllURLs()'));
+			const mockAuthProvider = new MockAuthProvider();
+			mockAuthProvider.getUserId.mockResolvedValue(null);
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const response = await endpoint_GET({ urlRepository: mockURLRepository }, {} as any);
+			const response = await endpoint_GET({ urlRepository: mockURLRepository, auth: mockAuthProvider }, {} as any);
+			expect(response.status).toBe(401);
+
+			const body = await response.json();
+			expect(body).toEqual({ error: 'Unauthorized' });
+		})
+
+		it("should return an empty array if the user has no URLs", async () => {
+			const mockURLRepository = new MockURLRepository();
+			const mockAuthProvider = new MockAuthProvider();
+			mockAuthProvider.getUserId.mockResolvedValue("00000000-0000-0000-0000-000000000001");
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const response = await endpoint_GET({ urlRepository: mockURLRepository, auth: mockAuthProvider }, {} as any);
+			expect(response.status).toBe(200);
+
+			const body = await response.json();
+			expect(body).toEqual([]);
+		})
+
+		it('should return 500 if getURLSOwnedBy throws', async () => {
+			const mockURLRepository = new MockURLRepository();
+			const mockAuthProvider = new MockAuthProvider();
+
+			mockURLRepository.getURLSOwnedBy.mockRejectedValue(new Error('Fake error in getURLSOwnedBy()'));
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const response = await endpoint_GET({ urlRepository: mockURLRepository, auth: mockAuthProvider }, {} as any);
 			expect(response.status).toBe(500);
 
 			const body = await response.json();
