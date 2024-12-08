@@ -11,5 +11,7 @@ import { endpoint_GET, endpoint_POST } from './endpoint';
 export const GET: RequestHandler = endpoint(withAuthProvider(withURLRepository(endpoint_GET)));
 
 export const POST: RequestHandler = endpoint(
-	withURLRepository(withAuthProvider(withBodySchema(insertUrlSchema.omit({ owner: true }), endpoint_POST)))
+	withURLRepository(
+		withAuthProvider(withBodySchema(insertUrlSchema.omit({ owner: true }), endpoint_POST))
+	)
 );

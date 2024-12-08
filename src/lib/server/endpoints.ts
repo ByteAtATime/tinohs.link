@@ -5,12 +5,16 @@ import type { IURLRepository } from '$lib/server/types/url';
 import type { IAuthProvider } from '$lib/server/types/auth';
 import { ClerkAuthProvider } from '$lib/server/auth';
 
-export type EndpointHandler<TDeps> = (
+export type MiddlewareHandler<TDeps> = (
 	deps: TDeps,
 	event: RequestEvent
 ) => Promise<Response> | Response;
 
-export const endpoint = (handler: EndpointHandler<Record<string, never>>): RequestHandler => {
+export type EndpointHandler<TDeps> = (deps: TDeps) => Promise<Response> | Response;
+
+type Handler<TDeps> = MiddlewareHandler<TDeps> | EndpointHandler<TDeps>;
+
+export const endpoint = (handler: Handler<Record<string, never>>): RequestHandler => {
 	return (event) => {
 		try {
 			return handler({}, event);
@@ -18,13 +22,13 @@ export const endpoint = (handler: EndpointHandler<Record<string, never>>): Reque
 			console.error(e);
 			throw e;
 		}
-	}
+	};
 };
 
 export const withBodySchema = <TDeps extends { body: z.infer<TSchema> }, TSchema extends z.ZodType>(
 	schema: TSchema,
-	handler: EndpointHandler<TDeps>
-): EndpointHandler<Omit<TDeps, 'body'>> => {
+	handler: Handler<TDeps>
+): Handler<Omit<TDeps, 'body'>> => {
 	return async (deps, event) => {
 		let rawBody: unknown;
 
@@ -59,16 +63,16 @@ export const withBodySchema = <TDeps extends { body: z.infer<TSchema> }, TSchema
 };
 
 export const withURLRepository = <TDeps extends { urlRepository: IURLRepository }>(
-	handler: EndpointHandler<TDeps>
-): EndpointHandler<Omit<TDeps, 'urlRepository'>> => {
+	handler: Handler<TDeps>
+): Handler<Omit<TDeps, 'urlRepository'>> => {
 	const urlRepository = new PostgresURLRepository();
 
 	return (deps, event) => handler({ ...deps, urlRepository } as TDeps, event);
 };
 
 export const withAuthProvider = <TDeps extends { auth: IAuthProvider }>(
-	handler: EndpointHandler<TDeps>
-): EndpointHandler<Omit<TDeps, 'auth'>> => {
+	handler: Handler<TDeps>
+): Handler<Omit<TDeps, 'auth'>> => {
 	return async (deps, event) => {
 		const auth = new ClerkAuthProvider(event.locals.auth);
 		return handler({ ...deps, auth } as unknown as TDeps, event);

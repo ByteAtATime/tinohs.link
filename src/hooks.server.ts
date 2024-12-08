@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { withClerkHandler } from 'clerk-sveltekit/server';
 
-const protectedPaths = ["/"];
+const protectedPaths = ['/'];
 
 export const handle = sequence(
 	withClerkHandler({

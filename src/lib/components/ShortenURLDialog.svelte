@@ -9,8 +9,8 @@
 	import { invalidateAll } from '$app/navigation';
 
 	type Props = {
-		error: string|undefined;
-	}
+		error: string | undefined;
+	};
 
 	const { error }: Props = $props();
 
@@ -61,7 +61,14 @@
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="short_url" class="text-right">Short Path</Label>
-					<Input type="text" id="short_url" name="short_url" placeholder="yt" class="col-span-3" required />
+					<Input
+						type="text"
+						id="short_url"
+						name="short_url"
+						placeholder="yt"
+						class="col-span-3"
+						required
+					/>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="short_url" class="text-right">
@@ -84,7 +91,7 @@
 			</div>
 
 			{#if error}
-				<p class="text-red-500 text-right text-sm mb-2">{error}</p>
+				<p class="mb-2 text-right text-sm text-red-500">{error}</p>
 			{/if}
 
 			<Dialog.Footer>

@@ -17,7 +17,7 @@ export const actions: Actions = {
 
 		if (!res.ok) {
 			const data = await res.json();
-			return fail(res.status, { error: data.error })
+			return fail(res.status, { error: data.error });
 		}
 
 		return {
@@ -40,4 +40,4 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	return {
 		urls: data
 	};
-}
+};

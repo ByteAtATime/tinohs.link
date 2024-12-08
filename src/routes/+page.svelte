@@ -27,36 +27,36 @@
 	};
 </script>
 
-<div class="px-4 py-8 max-w-screen-md mx-auto">
-	<div class="flex justify-between items-center mb-8">
+<div class="mx-auto max-w-screen-md px-4 py-8">
+	<div class="mb-8 flex items-center justify-between">
 		<h1 class="text-4xl font-bold">Your URLs</h1>
 		<ShortenURLDialog error={form?.error} />
 	</div>
 
 	{#if !data.urls?.length}
-		<div class="text-center py-12 bg-gray-50 rounded-lg">
-			<div class="text-gray-400 mb-4">
-				<LinkIcon class="w-12 h-12 mx-auto" />
+		<div class="rounded-lg bg-muted py-12 text-center">
+			<div class="mb-4 text-muted-foreground">
+				<LinkIcon class="mx-auto h-12 w-12" />
 			</div>
-			<h3 class="text-lg font-medium mb-2">No URLs yet</h3>
-			<p class="text-gray-500 mb-4">Create your first shortened URL to get started</p>
+			<h3 class="mb-2 text-lg font-medium">No URLs yet</h3>
+			<p class="mb-4 text-muted-foreground">Create your first shortened URL to get started</p>
 			<ShortenURLDialog error={form?.error} />
 		</div>
 	{:else}
-		<div class="grid gap-6 mt-4">
+		<div class="mt-4 grid gap-6">
 			{#each data.urls ?? [] as url}
 				<Card.Root>
 					<Card.Header>
-						<Card.Title>{url.name ?? url.id}</Card.Title>
+						<Card.Title class="underline">
+							<a href="/{url.id}" class="flex gap-2">{url.name ?? url.id}</a>
+						</Card.Title>
 						<Card.Description>Created {formatRelative(url.createdAt)}</Card.Description>
 					</Card.Header>
 					<Card.Content>
 						<p class="text-muted-foreground">{url.redirectUrl}</p>
 					</Card.Content>
 					<Card.Footer class="gap-2">
-						<Button variant="secondary">
-							Edit
-						</Button>
+						<Button variant="secondary">Edit</Button>
 						<Button variant="ghost">Delete</Button>
 					</Card.Footer>
 				</Card.Root>
@@ -64,4 +64,3 @@
 		</div>
 	{/if}
 </div>
-

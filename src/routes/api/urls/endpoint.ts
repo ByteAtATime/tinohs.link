@@ -44,7 +44,12 @@ export const endpoint_POST: EndpointHandler<{
 	}
 
 	try {
-		const newUrlId = await urlRepository.insertURL(body.redirectUrl, body.id, creator, body.name ?? undefined);
+		const newUrlId = await urlRepository.insertURL(
+			body.redirectUrl,
+			body.id,
+			creator,
+			body.name ?? undefined
+		);
 
 		return json(newUrlId, { status: 201 });
 	} catch (e) {

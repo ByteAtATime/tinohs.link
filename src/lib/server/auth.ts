@@ -18,7 +18,11 @@ export class ClerkAuthProvider implements IAuthProvider {
 			return null;
 		}
 
-		const ids = await db.select({ id: usersTable.id }).from(usersTable).where(and(eq(usersTable.authProvider, "clerk"), eq(usersTable.authProviderId, clerkUserId))).execute();
+		const ids = await db
+			.select({ id: usersTable.id })
+			.from(usersTable)
+			.where(and(eq(usersTable.authProvider, 'clerk'), eq(usersTable.authProviderId, clerkUserId)))
+			.execute();
 
 		if (ids.length === 0) {
 			return null;

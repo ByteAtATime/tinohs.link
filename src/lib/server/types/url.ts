@@ -6,5 +6,10 @@ export interface IURLRepository {
 	getURLSOwnedBy: (owner: string) => Promise<SelectUrlSchema[]>;
 
 	/** @returns The ID of the inserted URL */
-	insertURL: (redirectUrl: string, shortPath: string, creator: string, name?: string) => Promise<string>;
+	insertURL: (
+		redirectUrl: string,
+		shortPath: string,
+		creator: string,
+		name?: string
+	) => Promise<string>;
 }

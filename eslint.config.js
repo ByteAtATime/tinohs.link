@@ -23,6 +23,9 @@ export default ts.config(
 		}
 	},
 	{
+		ignores: ['src/lib/components/ui/**']
+	},
+	{
 		files: ['**/*.svelte'],
 
 		languageOptions: {
