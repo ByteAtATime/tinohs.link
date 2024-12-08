@@ -78,3 +78,15 @@ export const withAuthProvider = <TDeps extends { auth: IAuthProvider }>(
 		return handler({ ...deps, auth } as unknown as TDeps, event);
 	};
 };
+
+export const withRouteParams = <
+	TParams extends Record<string, string>,
+	TDeps extends { params: Partial<TParams> }
+>(
+	handler: Handler<TDeps>
+): Handler<Omit<TDeps, 'params'>> => {
+	return async (deps, event) => {
+		const params = event.params as Partial<TParams>;
+		return handler({ ...deps, params } as TDeps, event);
+	};
+};

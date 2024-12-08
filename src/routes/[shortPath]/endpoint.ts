@@ -1,11 +1,12 @@
 import type { EndpointHandler } from '$lib/server/endpoints';
 import type { IURLRepository } from '$lib/server/types/url';
 import { json, redirect } from '@sveltejs/kit';
+import type { RouteParams } from './$types';
 
-export const endpoint_GET: EndpointHandler<{ urlRepository: IURLRepository }> = async (
-	{ urlRepository },
-	{ params }
-) => {
+export const endpoint_GET: EndpointHandler<{
+	urlRepository: IURLRepository;
+	params: RouteParams;
+}> = async ({ urlRepository, params }) => {
 	const shortPath = params.shortPath;
 
 	if (!shortPath) {
